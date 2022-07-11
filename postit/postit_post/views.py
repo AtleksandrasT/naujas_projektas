@@ -33,34 +33,6 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         else:
             raise ValidationError(_("You cannot delete posts which are not yours!"))
 
-class CommentList(generics.ListCreateAPIView):
-    queryset = models.Post.objects.all()
-    serializer_class = serializers.PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.Post.objects.all()
-    serializer_class = serializers.PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def put(self, request, *args, **kwargs):
-        post = models.Post.objects.filter(pk=kwargs['pk'], user=request.user)
-        if post.exists():
-            return self.update(request, *args, **kwargs)
-        else:
-            raise ValidationError(_("You cannot edit posts which are not yours!"))
-
-    def delete(self, request, *args, **kwargs):
-        post = models.Post.objects.filter(pk=kwargs['pk'], user=request.user)
-        if post.exists():
-            return self.destroy(request, *args, **kwargs)
-        else:
-            raise ValidationError(_("You cannot delete posts which are not yours!"))
-
 
 class CommentList(generics.ListCreateAPIView):
     # queryset = models.Comment.objects.all()
@@ -76,21 +48,21 @@ class CommentList(generics.ListCreateAPIView):
         serializer.save(user=self.request.user, post=post)
 
 
-class CommentList(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.Post.objects.all()
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Comment.objects.all()
     serializer_class = serializers.CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def put(self, request, *args, **kwargs):
-        post = models.Comment.objects.filter(pk=kwargs['pk'], user=request.user)
-        if post.exists():
+        comment = models.Comment.objects.filter(pk=kwargs['pk'], user=request.user)
+        if comment.exists():
             return self.update(request, *args, **kwargs)
         else:
-            raise ValidationError(_("You cannot edit Comment which are not yours!"))
+            raise ValidationError(_("You cannot edit comments which are not yours!"))
 
     def delete(self, request, *args, **kwargs):
-        post = models.Comment.objects.filter(pk=kwargs['pk'], user=request.user)
-        if post.exists():
+        comment = models.Comment.objects.filter(pk=kwargs['pk'], user=request.user)
+        if comment.exists():
             return self.destroy(request, *args, **kwargs)
         else:
-            raise ValidationError(_("You cannot delete Comment which are not yours!"))
+            raise ValidationError(_("You cannot delete comments which are not yours!"))
