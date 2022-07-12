@@ -12,6 +12,11 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         related_name='posts',
     )
+    picture = models.ImageField(
+        _("picture"), 
+        upload_to="pictures", 
+        null=True, blank=True,
+    )
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True)
 
@@ -54,6 +59,8 @@ class PostLike(models.Model):
         related_name='post_likes',
         null=True, blank=True,
     )
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+
 
 class CommentLike(models.Model):
     comment = models.ForeignKey(
@@ -69,3 +76,4 @@ class CommentLike(models.Model):
         related_name='comment_likes',
         null=True, blank=True,
     )
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
